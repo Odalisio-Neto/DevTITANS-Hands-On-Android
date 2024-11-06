@@ -22,14 +22,14 @@ import com.example.plaintext.ui.viewmodel.ListViewModel
 import com.example.plaintext.ui.viewmodel.PreferencesViewModel
 import com.example.plaintext.utils.parcelableType
 import kotlin.reflect.typeOf
-
+import com.example.plaintext.ui.screens.Screen.Login
 @Composable
 fun PlainTextApp(
     appState: JetcasterAppState = rememberJetcasterAppState()
 ) {
     NavHost(
         navController = appState.navController,
-        startDestination = Screen.Hello("DevTITANS"),
+        startDestination = Screen.Login,
     )
     {
         composable<Screen.Hello>{
@@ -38,6 +38,7 @@ fun PlainTextApp(
         }
         composable<Screen.Login>{
             Login_screen(
+                appState = appState,
                 navigateToSettings = {},
                 navigateToList = {}
             )
