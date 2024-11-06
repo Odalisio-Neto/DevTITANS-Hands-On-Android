@@ -82,7 +82,9 @@ fun Login_screen(
 ) {
     Box(modifier = Modifier.fillMaxSize()){
         Scaffold( modifier = Modifier.fillMaxSize(), topBar = {
-            TopBarComponent()
+            TopBarComponent(
+                navigateToSettings = navigateToSettings
+            )
         })  { innerPadding ->
             Content(modifier = Modifier.padding(innerPadding), navController = appState.navController) // acessa o navController do appState
         }
@@ -114,7 +116,7 @@ fun MyAlertDialog(shouldShowDialog: MutableState<Boolean>) {
 @OptIn(ExperimentalMaterial3Api::class)
 fun TopBarComponent(
     navigateToSettings: (() -> Unit?)? = null,
-    navigateToSensores: (() -> Unit?)? = null,
+    //navigateToSensores: (() -> Unit?)? = null,
 ) {
     var expanded by remember { mutableStateOf(false) }
     val shouldShowDialog = remember { mutableStateOf(false) }
@@ -126,7 +128,7 @@ fun TopBarComponent(
     TopAppBar(
         title = { Text("PlainText") },
         actions = {
-            if (navigateToSettings != null && navigateToSensores != null) {
+            if (navigateToSettings != null){ //&& navigateToSensores != null) {
                 IconButton(onClick = { expanded = true }) {
                     Icon(Icons.Default.MoreVert, contentDescription = "Menu")
                 }

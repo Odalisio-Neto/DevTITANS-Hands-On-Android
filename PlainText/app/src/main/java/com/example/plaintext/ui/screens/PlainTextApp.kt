@@ -39,7 +39,7 @@ fun PlainTextApp(
         composable<Screen.Login>{
             Login_screen(
                 appState = appState,
-                navigateToSettings = {},
+                navigateToSettings = { appState.navController.navigate(Screen.Preferences) },
                 navigateToList = {}
             )
         }
@@ -51,6 +51,11 @@ fun PlainTextApp(
                 args,
                 navigateBack = {},
                 savePassword = { password -> Unit }
+            )
+        }
+        composable<Screen.Preferences>() {
+            SettingsScreen(
+                navController = appState.navController,
             )
         }
     }

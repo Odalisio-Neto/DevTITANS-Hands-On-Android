@@ -40,6 +40,7 @@ sealed class Screen() {
 
     @Serializable
     object sensors;
+
 }
 
 @Composable
