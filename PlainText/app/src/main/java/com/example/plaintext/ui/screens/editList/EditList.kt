@@ -117,11 +117,15 @@ fun EditList(
         ) {
 
             Column(
-                modifier = Modifier.fillMaxWidth()){
+                modifier = Modifier.fillMaxWidth()
+                    .background(Color(0xFF57cc99))
+                    .padding(10.dp, 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center){
                 if (isPasswordEmpty(args.password)) {
-                    Text("Adicionar Senha", fontSize = 20.sp)
+                    Text(text = "Adicionar Senha", fontSize = 20.sp, color = Color.White)
                 } else {
-                    Text("Editar Senha", fontSize = 20.sp)
+                    Text("Editar Senha", fontSize = 20.sp, color = Color.White)
                 }
             }
             EditInput(
