@@ -65,7 +65,7 @@ fun ListView(
     val context = LocalContext.current
 //    Toast.makeText(context, "hello user", Toast.LENGTH_SHORT).show()
 //
-    val pwd = PasswordInfo(1,"Twitter","dev","123","teste")
+    val pwd = PasswordInfo(0,"","","","")
 
     val listOfPasswords = listOf(
         PasswordInfo(1,"Twitter","dev","123","teste"),
