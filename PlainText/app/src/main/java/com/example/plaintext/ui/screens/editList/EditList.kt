@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -113,8 +115,8 @@ fun EditList(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(16.dp)
-        ) {
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
 
             Column(
                 modifier = Modifier.fillMaxWidth()
@@ -144,7 +146,11 @@ fun EditList(
             )
             // Outros campos de EditInput para login, notas, etc.
 
-            Button(onClick = { Toast.makeText(context, "Senha salva!", Toast.LENGTH_SHORT).show() }) {
+            Button(onClick =
+                    { Toast.makeText(context, "Senha salva!", Toast.LENGTH_SHORT).show() },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF378CC8)),
+                enabled = true) {
                 Text("Salvar")
             }
         }
