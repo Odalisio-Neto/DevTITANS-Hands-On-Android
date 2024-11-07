@@ -82,14 +82,18 @@ fun ListView(
         floatingActionButton = {
             AddButton(
                 onClick = {
-                    Toast.makeText(context, "hello user", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Adicionar nova senha", Toast.LENGTH_SHORT).show()
                     val navController = appState.navController
                     navController.navigate(Screen.EditList(pwd))
                 }
             )
         }
     )  { padding ->
-        ListItemContent(Modifier.padding(padding), listViewState, { })
+        ListItemContent(Modifier.padding(padding), listViewState, {
+            Toast.makeText(context, "Editar senha - ${it.name}", Toast.LENGTH_SHORT).show()
+            val navController = appState.navController
+            navController.navigate(Screen.EditList(it))
+        })
     }
 }
 
