@@ -1,6 +1,7 @@
 package com.example.plaintext.ui.screens.list
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -40,13 +41,57 @@ import com.example.plaintext.ui.viewmodel.ListViewState
 import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBar
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.plaintext.data.model.PasswordInfo
+import com.example.plaintext.ui.screens.JetcasterAppState
+import com.example.plaintext.ui.screens.Screen
+import com.example.plaintext.ui.screens.hello.Hello_screen
+import com.example.plaintext.ui.screens.hello.listViewState
+import com.example.plaintext.ui.screens.login.Content
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListView(
-) {}
+    appState: JetcasterAppState
+) {
+    val context = LocalContext.current
+//    Toast.makeText(context, "hello user", Toast.LENGTH_SHORT).show()
+//
+    val pwd = PasswordInfo(1,"Twitter","dev","123","teste")
+
+    val listOfPasswords = listOf(
+        PasswordInfo(1,"Twitter","dev","123","teste"),
+        PasswordInfo(1,"Facebook","devTitans","123","teste2"),
+        PasswordInfo(1,"Moodle","dev.com","123","teste2"),
+    )
+
+    val listViewState = ListViewState(listOfPasswords, true)
+
+    Scaffold( modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(title = { Text("PlainText") } )
+        },
+        floatingActionButton = {
+            AddButton(
+                onClick = {
+                    Toast.makeText(context, "hello user", Toast.LENGTH_SHORT).show()
+                    val navController = appState.navController
+                    navController.navigate(Screen.EditList(pwd))
+                }
+            )
+        }
+    )  { padding ->
+        ListItemContent(Modifier.padding(padding), listViewState, { })
+    }
+}
 
 @Composable
 fun AddButton(onClick: () -> Unit) {
@@ -66,25 +111,25 @@ fun ListItemContent(
     listState: ListViewState,
     navigateToEdit: (password: PasswordInfo) -> Unit
 ) {
-        when {
-            !listState.isCollected -> {
-                LoadingScreen()
-            }
+    when {
+        !listState.isCollected -> {
+            LoadingScreen()
+        }
 
-            else -> {
-                LazyColumn(
-                    modifier = modifier
-                        .fillMaxSize()
-                ) {
-                    items(listState.passwordList.size) {
-                        ListItem(
-                            listState.passwordList[it],
-                            navigateToEdit
-                        )
-                    }
+        else -> {
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize()
+            ) {
+                items(listState.passwordList.size) {
+                    ListItem(
+                        listState.passwordList[it],
+                        navigateToEdit
+                    )
                 }
             }
         }
+    }
 }
 
 @Composable
@@ -133,4 +178,3 @@ fun ListItem(
         )
     }
 }
-

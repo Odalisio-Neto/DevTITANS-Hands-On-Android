@@ -246,7 +246,7 @@ fun Content(modifier: Modifier, navController: NavHostController) {
                     if (name == "") {
                         Toast.makeText(context, "Digite seu login", Toast.LENGTH_SHORT).show()
                     } else {
-                        navController.navigate(Screen.Hello(name))
+                        navController.navigate(Screen.List)
                     }
 
                 },

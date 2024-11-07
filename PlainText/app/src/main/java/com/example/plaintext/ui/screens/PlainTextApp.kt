@@ -58,5 +58,11 @@ fun PlainTextApp(
                 navController = appState.navController,
             )
         }
+
+        composable<Screen.List>{
+            ListView(
+                appState = appState
+            )
+        }
     }
 }
