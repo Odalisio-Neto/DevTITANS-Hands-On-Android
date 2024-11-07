@@ -169,8 +169,18 @@ fun Content(
     var login by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
     var checked by remember { mutableStateOf(false) }
-
     var context = LocalContext.current
+
+    var initialized by remember { mutableStateOf(false) }
+    if(!initialized){
+        if(viewModel.preferencesState.preencher){
+            login = viewModel.preferencesState.login
+            senha = viewModel.preferencesState.password
+        }
+        checked = viewModel.preferencesState.preencher;
+
+        initialized = true;
+    }
 
     Column(modifier) {
         Row ( modifier = Modifier
@@ -239,7 +249,10 @@ fun Content(
             ) {
                 Checkbox(
                     checked = checked,
-                    onCheckedChange = { checked = it }
+                    onCheckedChange = {
+                        checked = it
+                        viewModel.updatePreencher(it)
+                    }
                 )
                 Text("Salvar as informações de login")
             }
@@ -247,14 +260,14 @@ fun Content(
             Button(
                 onClick = {
                     val name = login;
+//                    println("==> login: ${System.identityHashCode(viewModel)}")
                     if (name == "") {
                         Toast.makeText(context, "Digite seu login", Toast.LENGTH_SHORT).show()
                     } else if(viewModel.checkCredentials(login, senha)){
                         navController.navigate(Screen.List)
                     }else{
-                        Toast.makeText(context, "Login inválido", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Login/Senha inválidos!", Toast.LENGTH_SHORT).show()
                     }
-
                 },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF378CC8)),

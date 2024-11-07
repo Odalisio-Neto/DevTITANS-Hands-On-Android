@@ -18,12 +18,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val preferences: SharedPreferences = getPreferences(MODE_PRIVATE)
+        val preferencesHandler = PreferencesHandler
+        preferencesHandler.preferences = preferences
         enableEdgeToEdge()
         setContent {
             PlainTextTheme {
-                PlainTextApp(
-                    preferences=preferences
-                )
+                PlainTextApp()
             }
         }
     }

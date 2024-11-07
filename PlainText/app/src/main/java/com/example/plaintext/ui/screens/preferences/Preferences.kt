@@ -30,32 +30,20 @@ import kotlinx.coroutines.delay
 @Composable
 fun SettingsScreen(
     navController: NavHostController?,
-    preferences: SharedPreferences?,
     viewModel: PreferencesViewModel = hiltViewModel(),
 ){
-    var initializedFromPreferences by remember {
-        mutableStateOf(false)
-    }
-    if(!initializedFromPreferences){
-        val state = loadFromPreferences(preferences!!)
-        viewModel.updateLogin(state.login)
-        viewModel.updatePassword(state.password)
-        viewModel.updatePreencher(state.preencher)
-        initializedFromPreferences = true
-    }
-
     Scaffold(
         topBar = {
             TopBarComponent()
         }
     ){ padding ->
-        SettingsContent(modifier = Modifier.padding(padding), viewModel, preferences)
+        SettingsContent(modifier = Modifier.padding(padding), viewModel)
     }
 }
 
 @Composable
-fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewModel, preferences: SharedPreferences?) {
-
+fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewModel) {
+//    println("==> settings: ${System.identityHashCode(viewModel)}")
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -69,7 +57,6 @@ fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewMod
             summary = "Preencher login na tela inicial"
         ){
             viewModel.updateLogin(it)
-            saveToPreferences(preferences!!, viewModel.preferencesState)
         }
 
         PreferenceInput(
@@ -79,7 +66,6 @@ fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewMod
             summary = "Senha para entrar no sistema"
         ){
             viewModel.updatePassword(it)
-            saveToPreferences(preferences!!, viewModel.preferencesState)
         }
 
         PreferenceItem(
@@ -87,7 +73,6 @@ fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewMod
             summary = "Preencher login na tela inicial",
             onClick = {
                 viewModel.updatePreencher(!viewModel.preferencesState.preencher)
-                saveToPreferences(preferences!!, viewModel.preferencesState)
             },
             control = {
                 Switch(
@@ -105,21 +90,5 @@ fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewMod
 @Preview(showBackground = true)
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen(null, null )
-}
-
-fun loadFromPreferences(preferences: SharedPreferences) :PreferencesState {
-    return PreferencesState(
-        preferences.getString("login", "devtitans")!!,
-        preferences.getString("password", "123")!!,
-        preferences.getBoolean("preencher", true),
-    )
-}
-
-fun saveToPreferences(preferences: SharedPreferences, state: PreferencesState) : Unit {
-    preferences.edit {
-        putString("login", state.login)
-        putString("password", state.password)
-        putBoolean("preencher", state.preencher)
-    }
+    SettingsScreen(null)
 }

@@ -28,8 +28,8 @@ import com.example.plaintext.ui.screens.Screen.Login
 fun PlainTextApp(
     appState: JetcasterAppState = rememberJetcasterAppState(),
     preferencesViewModel: PreferencesViewModel = hiltViewModel(),
-    preferences: SharedPreferences
 ) {
+
     NavHost(
         navController = appState.navController,
         startDestination = Screen.Login,
@@ -61,7 +61,6 @@ fun PlainTextApp(
             SettingsScreen(
                 navController = appState.navController,
                 viewModel=preferencesViewModel,
-                preferences=preferences
             )
         }
 
