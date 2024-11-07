@@ -63,6 +63,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.plaintext.R
 import com.example.plaintext.ui.screens.JetcasterAppState
 import com.example.plaintext.ui.screens.Screen
+import com.example.plaintext.ui.theme.PlainTextTheme
 import com.example.plaintext.ui.viewmodel.PreferencesViewModel
 data class LoginState(
     val preencher: Boolean,
@@ -258,6 +259,20 @@ fun Content(modifier: Modifier, navController: NavHostController) {
 
 
 
+        }
+    }
+}
+
+
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun LoginScreenPreview() {
+    PlainTextTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Scaffold(topBar = { TopBarComponent() }) {
+                Content(modifier = Modifier.padding(it), navController = rememberNavController())
+            }
         }
     }
 }
