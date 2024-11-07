@@ -86,7 +86,7 @@ fun Login_screen(
                 navigateToSettings = navigateToSettings
             )
         })  { innerPadding ->
-            Content(modifier = Modifier.padding(innerPadding), navController = appState.navController) // acessa o navController do appState
+            Content(modifier = Modifier.padding(innerPadding), navController = appState.navController, viewModel=viewModel) // acessa o navController do appState
         }
     }
 }
@@ -161,7 +161,11 @@ fun TopBarComponent(
 }
 
 @Composable
-fun Content(modifier: Modifier, navController: NavHostController) {
+fun Content(
+    modifier: Modifier,
+    navController: NavHostController,
+    viewModel: PreferencesViewModel = hiltViewModel()
+) {
     var login by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
     var checked by remember { mutableStateOf(false) }
@@ -245,8 +249,10 @@ fun Content(modifier: Modifier, navController: NavHostController) {
                     val name = login;
                     if (name == "") {
                         Toast.makeText(context, "Digite seu login", Toast.LENGTH_SHORT).show()
-                    } else {
+                    } else if(viewModel.checkCredentials(login, senha)){
                         navController.navigate(Screen.List)
+                    }else{
+                        Toast.makeText(context, "Login inválido", Toast.LENGTH_SHORT).show()
                     }
 
                 },

@@ -1,5 +1,6 @@
 package com.example.plaintext.ui.screens
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,10 +17,13 @@ import kotlinx.serialization.Serializable
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val preferences: SharedPreferences = getPreferences(MODE_PRIVATE)
         enableEdgeToEdge()
         setContent {
             PlainTextTheme {
-                PlainTextApp()
+                PlainTextApp(
+                    preferences=preferences
+                )
             }
         }
     }

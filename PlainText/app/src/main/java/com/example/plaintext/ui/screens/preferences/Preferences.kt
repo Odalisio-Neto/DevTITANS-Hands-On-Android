@@ -1,6 +1,7 @@
 package com.example.plaintext.ui.screens.preferences
 
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -26,20 +28,34 @@ import com.example.plaintext.ui.viewmodel.PreferencesViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun SettingsScreen(navController: NavHostController?,
-                   viewModel: PreferencesViewModel = hiltViewModel()
+fun SettingsScreen(
+    navController: NavHostController?,
+    preferences: SharedPreferences?,
+    viewModel: PreferencesViewModel = hiltViewModel(),
 ){
+    var initializedFromPreferences by remember {
+        mutableStateOf(false)
+    }
+    if(!initializedFromPreferences){
+        val state = loadFromPreferences(preferences!!)
+        viewModel.updateLogin(state.login)
+        viewModel.updatePassword(state.password)
+        viewModel.updatePreencher(state.preencher)
+        initializedFromPreferences = true
+    }
+
     Scaffold(
         topBar = {
             TopBarComponent()
         }
     ){ padding ->
-        SettingsContent(modifier = Modifier.padding(padding), viewModel)
+        SettingsContent(modifier = Modifier.padding(padding), viewModel, preferences)
     }
 }
 
 @Composable
-fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewModel) {
+fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewModel, preferences: SharedPreferences?) {
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -49,32 +65,36 @@ fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewMod
         PreferenceInput(
             title = "Preencher Login",
             label = "Login",
-            fieldValue = "",
+            fieldValue = viewModel.preferencesState.login,
             summary = "Preencher login na tela inicial"
         ){
-            // função para alterar o login
+            viewModel.updateLogin(it)
+            saveToPreferences(preferences!!, viewModel.preferencesState)
         }
 
         PreferenceInput(
             title = "Setar Senha",
             label = "Label",
-            fieldValue = "",
+            fieldValue = viewModel.preferencesState.password,
             summary = "Senha para entrar no sistema"
         ){
-            // função para alterar a senha
+            viewModel.updatePassword(it)
+            saveToPreferences(preferences!!, viewModel.preferencesState)
         }
 
         PreferenceItem(
             title = "Preencher Login",
             summary = "Preencher login na tela inicial",
             onClick = {
-                // deve alterar o estado que representa se o switch está ligado ou não
+                viewModel.updatePreencher(!viewModel.preferencesState.preencher)
+                saveToPreferences(preferences!!, viewModel.preferencesState)
             },
             control = {
                 Switch(
-                    checked = false, // deve ler o estado que representa se o switch está ligado ou não
+                    checked = viewModel.preferencesState.preencher, // deve ler o estado que representa se o switch está ligado ou não
                     onCheckedChange = {
                         // deve alterar o estado que representa se o switch está ligado ou não
+                        viewModel.updatePreencher(!viewModel.preferencesState.preencher)
                     }
                 )
             }
@@ -85,5 +105,21 @@ fun SettingsContent(modifier: Modifier = Modifier, viewModel: PreferencesViewMod
 @Preview(showBackground = true)
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen(null)
+    SettingsScreen(null, null )
+}
+
+fun loadFromPreferences(preferences: SharedPreferences) :PreferencesState {
+    return PreferencesState(
+        preferences.getString("login", "devtitans")!!,
+        preferences.getString("password", "123")!!,
+        preferences.getBoolean("preencher", true),
+    )
+}
+
+fun saveToPreferences(preferences: SharedPreferences, state: PreferencesState) : Unit {
+    preferences.edit {
+        putString("login", state.login)
+        putString("password", state.password)
+        putBoolean("preencher", state.preencher)
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.plaintext.ui.screens
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -25,7 +26,9 @@ import kotlin.reflect.typeOf
 import com.example.plaintext.ui.screens.Screen.Login
 @Composable
 fun PlainTextApp(
-    appState: JetcasterAppState = rememberJetcasterAppState()
+    appState: JetcasterAppState = rememberJetcasterAppState(),
+    preferencesViewModel: PreferencesViewModel = hiltViewModel(),
+    preferences: SharedPreferences
 ) {
     NavHost(
         navController = appState.navController,
@@ -40,7 +43,8 @@ fun PlainTextApp(
             Login_screen(
                 appState = appState,
                 navigateToSettings = { appState.navController.navigate(Screen.Preferences) },
-                navigateToList = {}
+                navigateToList = {},
+                viewModel=preferencesViewModel
             )
         }
         composable<Screen.EditList>(
@@ -56,6 +60,8 @@ fun PlainTextApp(
         composable<Screen.Preferences>() {
             SettingsScreen(
                 navController = appState.navController,
+                viewModel=preferencesViewModel,
+                preferences=preferences
             )
         }
 
