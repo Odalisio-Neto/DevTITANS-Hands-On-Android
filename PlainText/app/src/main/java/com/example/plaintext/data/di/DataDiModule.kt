@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.createSavedStateHandle
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.example.plaintext.data.PlainTextDatabase
 import com.example.plaintext.data.dao.PasswordDao
 import com.example.plaintext.data.repository.LocalPasswordDBStore
@@ -30,4 +31,16 @@ object DataDiModule {
     @Provides
 	@Singleton
 	fun provideDBSimulator(): dbSimulator = dbSimulator()
+
+    @Provides
+    @Singleton
+    fun provideDatabaseInstance(
+        @ApplicationContext context: Context
+    ):PlainTextDatabase{
+        return Room.databaseBuilder(
+            context,
+            PlainTextDatabase::class.java,
+            "plaintextdatabase"
+        ).build()
+    }
 }

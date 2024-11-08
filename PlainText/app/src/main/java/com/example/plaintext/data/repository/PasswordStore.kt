@@ -1,8 +1,10 @@
 package com.example.plaintext.data.repository
 
+import androidx.room.Dao
 import com.example.plaintext.data.dao.PasswordDao
 import com.example.plaintext.data.model.Password
 import com.example.plaintext.data.model.PasswordInfo
+import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 
 interface PasswordDBStore {
@@ -14,6 +16,8 @@ interface PasswordDBStore {
     suspend fun isEmpty(): Flow<Boolean>
 }
 
+
+@Dao
 class LocalPasswordDBStore(
     private val passwordDao : PasswordDao
 ): PasswordDBStore {
